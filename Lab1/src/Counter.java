@@ -1,16 +1,13 @@
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Radek
- * Date: 15.10.13
- * Time: 19:13
- * To change this template use File | Settings | File Templates.
- */
-
 /*
-    Windows 64 bit prawie natychmiast, z synch okolo 41 sek - core i5-3210m, z atomic okolo 32 sek
-    Ubuntu 12.10 OpenJDK 64 bit prawie natychmiast, z synch okolo 45 sek - core2duo p8600
+    Windows 7 64 bit Java Oracle | natychmiast, z synch okolo 41 sek, z atomic okolo 31 sek - core i5-3210m  2/4
+    Ubuntu 12.10 64 bit OpenJDK | natychmiast, z synch okolo 45 sek, z atomic okolo 21 sek - core2duo p8600  2/2
+
+
+    Przy 1k watkow utrudnione np. sluchanie muzyki, przelaczanie sie pomiedzy programami
+    Przy 2k watkow: pierwsze sekundy ok, potem sie nie da nic robic
+    cmd test wypisal 7547 watkow
  */
 public class Counter {
 
@@ -26,9 +23,9 @@ public class Counter {
             public void run(){
                 for(int i=0;i<500000000;i++)
                     CounterObj.count.getAndIncrement();
-                    /*synchronized(CounterObj){
-                        CounterObj.count++;
-                    }*/
+                    //synchronized(CounterObj){
+                    //    CounterObj.count++;
+                    //}
                 System.out.println(CounterObj.count);
             }
         }.start();
@@ -37,11 +34,21 @@ public class Counter {
             public void run(){
                 for(int i=0;i<500000000;i++)
                     CounterObj.count.getAndDecrement();
-                    /*synchronized(CounterObj){
-                        CounterObj.count--;
-                    }*/
+                    //synchronized(CounterObj){
+                    //    CounterObj.count--;
+                    //}
                 System.out.println(CounterObj.count);
             }
         }.start();
+
+        for( int i = 0; i <500; i++){
+            System.out.println(i);
+            new Thread(){
+                public void run(){
+                    for(;;);
+                }
+            }.start();
+        }
+
     }
 }
