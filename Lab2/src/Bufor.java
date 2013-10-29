@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Bufor {
 
-    List<String> bufor;
+    final List<String> bufor;
     final int MAX;
 
     public Bufor(int size) {
@@ -84,19 +84,17 @@ public class Bufor {
     }
 */
     public static void main(String... args) {
-        final Bufor testBuffor = new Bufor(10000);
+        final Bufor testBuffor = new Bufor(3);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             new Thread() {
                 public void run() {
-                    //for(int i = 0;i<10;i++)
                     testBuffor.set(" " + Thread.currentThread());
                 }
             }.start();
 
             new Thread() {
                 public void run() {
-                    //for(int i = 0;i<10;i++)
                     System.out.println("GET: " + testBuffor.get());
                 }
             }.start();
