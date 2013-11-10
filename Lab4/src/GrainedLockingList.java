@@ -14,6 +14,7 @@ public class GrainedLockingList {
     Lock initial = new ReentrantLock();
 
     class Node {
+
         int value;
         Lock lock;
         Node next;
