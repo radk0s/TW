@@ -36,7 +36,7 @@ public class BuforSem {
     }
 
     public static void main(String... args) {
-        final BuforSem testBuffor = new BuforSem(20);
+        final BuforSem testBuffor = new BuforSem(5);
 
         for (int i = 0; i < 1000; i++) {
             new Thread() {
