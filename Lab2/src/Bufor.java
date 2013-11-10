@@ -8,7 +8,7 @@ public class Bufor {
 
     public Bufor(int size) {
         bufor = new LinkedList<String>();
-        MAX = size;
+        MAX = size; 
     }
 
     public String get() {
