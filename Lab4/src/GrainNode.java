@@ -27,6 +27,7 @@ public class GrainNode {
             current.unlock();
             current = current.next;
         }
+        current.unlock();
         return current.next != null;
     }
 
@@ -43,6 +44,7 @@ public class GrainNode {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        current.unlock();
         return current.next != null;
     }
 

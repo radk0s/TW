@@ -10,78 +10,64 @@ public class ListTest {
         final GrainedLockingList list = new GrainedLockingList();
         final SynchronizedList list2 = new SynchronizedList();
 
+        for(int i = 0; i < 200 ; i++){
+            list.add(i);
+            list2.add(i);
+        }
+
+
         long start = System.currentTimeMillis();
-        for(int i =0;i< 500; i++){
-            final int finalI = i;
             Thread  td = new Thread(){
                 public void run(){
-                    list.add(finalI,1);
+                    for(int i = 200; i > 0 ; i--){
+                        list.contains(i,1);
+                    }
+                }
+            };
+        Thread  td2 = new Thread(){
+                public void run(){
+                    for(int i = 200; i > 0 ; i--){
+                        list.contains(i,1);
+                    }
                 }
             };
             td.start();
+            td2.start();
             try {
                 td.join();
+                td2.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+
         long stop = System.currentTimeMillis();
-        System.out.println("Time diff add: "+(stop-start));
-
-        start = System.currentTimeMillis();
-        for(int i =0;i< 500; i++){
-            final int finalI = i;
-            Thread  td = new Thread(){
-                public void run(){
-                    list2.add(finalI,1);
-                }
-            };
-            td.start();
-            try {
-                td.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        stop = System.currentTimeMillis();
-        System.out.println("Time diff add: "+(stop-start));
-
-        start = System.currentTimeMillis();
-        for(int i =500; i > 0; i--){
-            final int finalI = i;
-            Thread  td = new Thread(){
-                public void run(){
-                    list.contains(finalI);
-                }
-            };
-            td.start();
-            try {
-                td.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        stop = System.currentTimeMillis();
         System.out.println("Time diff contains: "+(stop-start));
 
         start = System.currentTimeMillis();
-        for(int i =500; i > 0; i--){
-            final int finalI = i;
-            Thread  td = new Thread(){
-                public void run(){
-                    list2.contains(finalI);
+        Thread  td3 = new Thread(){
+            public void run(){
+                for(int i = 200; i > 0 ; i--){
+                    list2.contains(i,1);
                 }
-            };
-            td.start();
-            try {
-                td.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        };
+        Thread  td4 = new Thread(){
+            public void run(){
+                for(int i = 200; i > 0 ; i--){;
+                    list2.contains(i,1);
+                }
+            }
+        };
+        td3.start();
+        td4.start();
+        try {
+            td3.join();
+            td4.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         stop = System.currentTimeMillis();
-        System.out.println("Time diff contails: "+(stop-start));
-
+        System.out.println("Time diff contains: "+(stop-start));
     }
 }
