@@ -9,19 +9,43 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Executors;
 
 
 public class CacheTest {
 
-    static Cache<String,String> myCache = new Cache<String, String>(5000, 2);
+    static Cache<String,String> myCache = new Cache<String, String>(3000, 2);
 
     public static void main(String[] args) throws Exception {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/test", new MyHandler());
         server.setExecutor(Executors.newFixedThreadPool(4));
         server.start();
+
+        for(int i = 0; i< 10; i++){
+            Thread td = new Thread(){
+                public void run() {
+                    try {
+                        long start = System.currentTimeMillis();
+                        URL url = new URL("http://localhost:8000/test?"+(int)(Math.random()*100)%2);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                        }
+                        in.close();
+                        long stop= System.currentTimeMillis();
+                        System.out.println("Request time: " + (stop - start));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            td.start();
+           // if (i%3 == 0)
+                Thread.sleep(500);
+        }
     }
 
     static class MyHandler implements HttpHandler {
@@ -31,11 +55,6 @@ public class CacheTest {
             String result = myCache.getCache(t.getRequestURI().toString());
 
             if(result == null){
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 StringBuilder response =  new StringBuilder();
                 URL url = new URL("http://docs.oracle.com/");
                 BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
