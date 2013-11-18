@@ -12,17 +12,12 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.concurrent.Executors;
 
+
 public class CacheTest {
+
+    static Cache<String,String> myCache = new Cache<String, String>(5000, 2);
+
     public static void main(String[] args) throws Exception {
-
-        Cache<String,String> myCache = new Cache<String, String>(500, 2);
-
-        myCache.setCache("ala","kot");
-        Thread.sleep(600);
-        myCache.setCache("ola", "pies");
-        myCache.setCache("ula", "chomik");
-        System.out.print(myCache);
-
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/test", new MyHandler());
         server.setExecutor(Executors.newFixedThreadPool(4));
@@ -31,22 +26,33 @@ public class CacheTest {
 
     static class MyHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
-            StringBuilder response =  new StringBuilder();
 
 
-            URL url = new URL("http://docs.oracle.com/");
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+            String result = myCache.getCache(t.getRequestURI().toString());
+
+            if(result == null){
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                StringBuilder response =  new StringBuilder();
+                URL url = new URL("http://docs.oracle.com/");
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                result = response.toString();
+                myCache.setCache(t.getRequestURI().toString(),result);
             }
-            in.close();
 
 
-            t.sendResponseHeaders(200, response.length());
-            System.out.println(t.getHttpContext().getPath());
+            t.sendResponseHeaders(200, result.length());
+            System.out.println(t.getRequestURI());
             OutputStream os = t.getResponseBody();
-            os.write(response.toString().getBytes());
+            os.write(result.getBytes());
             os.close();
         }
     }
