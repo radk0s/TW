@@ -41,7 +41,6 @@ public class Node {
 
     public boolean remove(Object o) {
         Node current = this;
-        System.out.println(current.next.val + "  " + o);
         while (current.next != null && !current.next.val.equals(o)) {
             current = current.next;
         }
@@ -62,7 +61,7 @@ public class Node {
         return true;
     }
 
-    public boolean add(Object o,int milis) {
+    public boolean add(Object o, int milis) {
         Node current = this;
         while (current.next != null) {
             current = current.next;

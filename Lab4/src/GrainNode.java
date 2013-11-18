@@ -31,7 +31,7 @@ public class GrainNode {
         return current.next != null;
     }
 
-    public boolean contains(Object o,int milis) {
+    public boolean contains(Object o, int milis) {
         GrainNode current = this;
         current.lock();
         while (current.next != null && !current.next.val.equals(o)) {
@@ -48,23 +48,6 @@ public class GrainNode {
         return current.next != null;
     }
 
-    public boolean remove(Object o) {
-        GrainNode current = this;
-        current.lock();
-        System.out.println(current.next.val + "  " + o);
-        while (current.next != null && !current.next.val.equals(o)) {
-            current.next.lock();
-            current.unlock();
-            current = current.next;
-        }
-        if (current.next == null) {
-            return false;
-        } else {
-            current.next = current.next.next;
-            return true;
-        }
-    }
-
     public boolean add(Object o) {
         GrainNode current = this;
         current.lock();
@@ -78,7 +61,7 @@ public class GrainNode {
         return true;
     }
 
-    public boolean add(Object o,int milis) {
+    public boolean add(Object o, int milis) {
         GrainNode current = this;
         current.lock();
         while (current.next != null) {
@@ -94,6 +77,26 @@ public class GrainNode {
         current.next = new GrainNode(o, null);
         current.unlock();
         return true;
+    }
+
+    public boolean remove(Object o) {
+        GrainNode current = this;
+        current.lock();
+        while (current.next != null && !current.next.val.equals(o)) {
+            current.next.lock();
+            current.unlock();
+            current = current.next;
+        }
+        try {
+            if (current.next == null) {
+                return false;
+            } else {
+                current.next = current.next.next;
+                return true;
+            }
+        } finally {
+            current.unlock();
+        }
     }
 
     Object getValue() {

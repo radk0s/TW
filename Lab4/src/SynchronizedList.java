@@ -12,22 +12,22 @@ public class SynchronizedList {
     }, null);
 
     public synchronized boolean add(Object obj) {
-            return list.add(obj);
+        return list.add(obj);
     }
 
-    public synchronized boolean add(Object obj,int milis) {
-            return list.add(obj,milis);
+    public synchronized boolean add(Object obj, int milis) {
+        return list.add(obj, milis);
     }
 
     public synchronized boolean remove(Object obj) {
-            return list.remove(obj);
+        return list.remove(obj);
     }
 
     public synchronized boolean contains(Object obj) {
-            return list.contains(obj);
+        return list.contains(obj);
     }
 
-    public synchronized boolean contains(Object obj,int milis) {
+    public synchronized boolean contains(Object obj, int milis) {
         return list.contains(obj, milis);
     }
 

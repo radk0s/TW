@@ -11,7 +11,7 @@ public class GrainedLockingList {
     }
 
     public boolean add(Object obj, int milis) {
-        return list.add(obj,milis);
+        return list.add(obj, milis);
     }
 
     public boolean remove(Object obj) {
@@ -22,8 +22,8 @@ public class GrainedLockingList {
         return list.contains(obj);
     }
 
-    public boolean contains(Object obj,int milis) {
-        return list.contains(obj,milis);
+    public boolean contains(Object obj, int milis) {
+        return list.contains(obj, milis);
     }
 
     public void print() {

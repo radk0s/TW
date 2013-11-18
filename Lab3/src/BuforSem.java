@@ -20,7 +20,7 @@ public class BuforSem {
         full.acquire();
         critical.acquire();
         count--;
-        System.out.println("Item removed. Avaliable: "+count+"/"+capacity);
+        System.out.println("Item removed. Avaliable: " + count + "/" + capacity);
         critical.release();
         empty.release();
     }
@@ -30,7 +30,7 @@ public class BuforSem {
         empty.acquire();
         critical.acquire();
         count++;
-        System.out.println("Item added. Avaliable: "+count+"/"+capacity);
+        System.out.println("Item added. Avaliable: " + count + "/" + capacity);
         critical.release();
         full.release();
     }

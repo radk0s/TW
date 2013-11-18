@@ -8,7 +8,7 @@ public class Bufor {
 
     public Bufor(int size) {
         bufor = new LinkedList<String>();
-        MAX = size; 
+        MAX = size;
     }
 
     public String get() {
@@ -64,25 +64,26 @@ public class Bufor {
             bufor.notifyAll();
         }
     }
-/*
-    public E take() throws InterruptedException {
-        final ReentrantLock lock = this.lock;
-        lock.lockInterruptibly();
-        try {
+
+    /*
+        public E take() throws InterruptedException {
+            final ReentrantLock lock = this.lock;
+            lock.lockInterruptibly();
             try {
-                while (count == 0)
-                    notEmpty.await();
-            } catch (InterruptedException ie) {
-                notEmpty.signal(); // propagate to non-interrupted thread
-                throw ie;
+                try {
+                    while (count == 0)
+                        notEmpty.await();
+                } catch (InterruptedException ie) {
+                    notEmpty.signal(); // propagate to non-interrupted thread
+                    throw ie;
+                }
+                E x = extract();
+                return x;
+            } finally {
+                lock.unlock();
             }
-            E x = extract();
-            return x;
-        } finally {
-            lock.unlock();
         }
-    }
-*/
+    */
     public static void main(String... args) {
         final Bufor testBuffor = new Bufor(3);
 
